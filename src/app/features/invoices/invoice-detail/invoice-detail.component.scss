@@ -1,0 +1,209 @@
+/* src/app/features/invoices/invoice-detail/invoice-detail.component.scss */
+.page-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  
+  .page-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.invoice-container {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-bottom: 2rem;
+}
+
+.invoice-header {
+  margin-bottom: 2rem;
+  
+  .company-name {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .company-address {
+    margin-bottom: 0;
+    color: #6c757d;
+  }
+  
+  .invoice-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #007bff;
+  }
+  
+  .invoice-number {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .invoice-status {
+    margin-top: 0.5rem;
+    
+    .badge {
+      font-size: 0.875rem;
+      padding: 0.5em 0.75em;
+    }
+  }
+}
+
+.invoice-dates {
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-top: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+  
+  .date-group {
+    display: flex;
+    flex-direction: column;
+    
+    .date-label {
+      font-weight: 600;
+      color: #6c757d;
+    }
+    
+    .date-value {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.invoice-customer {
+  margin-bottom: 2rem;
+  
+  .info-title {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+  
+  .info-content {
+    color: #212529;
+    
+    .customer-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .customer-email, .customer-address {
+      margin-bottom: 0.25rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 0.5rem;
+      
+      .detail-label {
+        font-weight: 600;
+        width: 130px;
+        color: #6c757d;
+      }
+      
+      .detail-value {
+        flex: 1;
+      }
+    }
+  }
+}
+
+.invoice-items {
+  margin-bottom: 2rem;
+  
+  .table {
+    margin-bottom: 0;
+    
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      border-top: none;
+    }
+    
+    .item-name {
+      font-weight: 500;
+    }
+    
+    .item-sku {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    
+    tfoot {
+      background-color: #f8f9fa;
+      
+      td {
+        border-top: 1px solid #dee2e6;
+        border-bottom: none;
+      }
+      
+      .table-total td {
+        font-size: 1.1rem;
+        border-top: 2px solid #dee2e6;
+      }
+    }
+  }
+}
+
+.invoice-notes {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  
+  .notes-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .notes-content {
+    margin-bottom: 0;
+  }
+}
+
+.invoice-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+  
+  .footer-content {
+    color: #6c757d;
+  }
+  
+  .payment-terms {
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+}
+
+// Print styles
+@media print {
+  .print-hide {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  .invoice-container {
+    padding: 0;
+    box-shadow: none;
+  }
+  
+  .container-fluid {
+    padding: 0;
+  }
+  
+  body {
+    background-color: white;
+  }
+}
+
+.print-only {
+  display: none;
+}

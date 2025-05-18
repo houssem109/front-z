@@ -1,0 +1,40 @@
+/* src/app/features/invoices/invoice-list/invoice-list.component.scss */
+.page-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  
+  .page-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.table {
+  margin-bottom: 0;
+  
+  th {
+    font-weight: 600;
+    color: #6c757d;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+.btn-group {
+  .btn {
+    border-radius: 4px;
+    margin-right: 0.25rem;
+    
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

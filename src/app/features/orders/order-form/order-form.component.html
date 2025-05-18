@@ -1,0 +1,349 @@
+<!-- src/app/features/orders/order-form/order-form.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Create New Order</h1>
+      <p class="text-muted">Create a new customer order</p>
+    </div>
+    <div>
+      <a [routerLink]="['/orders']" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Orders
+      </a>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading.form" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Order Form -->
+  <form [formGroup]="orderForm" (ngSubmit)="onSubmit()" *ngIf="!isLoading.form">
+    <div class="row g-4">
+      <!-- Customer Selection -->
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Customer Information</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-12">
+                <label for="customerId" class="form-label"
+                  >Customer <span class="text-danger">*</span></label
+                >
+                <select
+                  id="customerId"
+                  formControlName="customerId"
+                  class="form-select"
+                  [class.is-invalid]="
+                    orderForm.get('customerId')?.touched &&
+                    orderForm.get('customerId')?.invalid
+                  "
+                  (change)="onCustomerChange($event)"
+                >
+                  <option value="">Select a customer</option>
+                  <option
+                    *ngFor="let customer of customers"
+                    [value]="customer.id"
+                  >
+                    {{ customer.firstName }} {{ customer.lastName }} ({{
+                      customer.email
+                    }})
+                  </option>
+                </select>
+                <div
+                  *ngIf="
+                    orderForm.get('customerId')?.touched &&
+                    orderForm.get('customerId')?.invalid
+                  "
+                  class="invalid-feedback"
+                >
+                  Please select a customer
+                </div>
+
+                <div *ngIf="isLoading.customers" class="text-center mt-2">
+                  <div
+                    class="spinner-border spinner-border-sm text-primary"
+                    role="status"
+                  >
+                    <span class="visually-hidden">Loading customers...</span>
+                  </div>
+                  <span class="ms-2">Loading customers...</span>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="shippingAddress" class="form-label"
+                  >Shipping Address</label
+                >
+                <textarea
+                  id="shippingAddress"
+                  formControlName="shippingAddress"
+                  class="form-control"
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <div class="col-md-6">
+                <label for="billingAddress" class="form-label"
+                  >Billing Address</label
+                >
+                <textarea
+                  id="billingAddress"
+                  formControlName="billingAddress"
+                  class="form-control"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Status -->
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+            <h5 class="card-title mb-0">Order Settings</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="status" class="form-label">Order Status</label>
+              <select id="status" formControlName="status" class="form-select">
+                <option
+                  *ngFor="let status of orderStatusValues"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="paymentStatus" class="form-label"
+                >Payment Status</label
+              >
+              <select
+                id="paymentStatus"
+                formControlName="paymentStatus"
+                class="form-select"
+              >
+                <option
+                  *ngFor="let status of paymentStatusValues"
+                  [value]="status"
+                >
+                  {{ status }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="paymentMethod" class="form-label"
+                >Payment Method</label
+              >
+              <select
+                id="paymentMethod"
+                formControlName="paymentMethod"
+                class="form-select"
+              >
+                <option value="">Select payment method</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="PayPal">PayPal</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="notes" class="form-label">Order Notes</label>
+              <textarea
+                id="notes"
+                formControlName="notes"
+                class="form-control"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div
+            class="card-header bg-white d-flex justify-content-between align-items-center"
+          >
+            <h5 class="card-title mb-0">Order Items</h5>
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              (click)="addItem()"
+            >
+              <i class="bi bi-plus-lg me-1"></i> Add Item
+            </button>
+          </div>
+          <div class="card-body">
+            <div *ngIf="isLoading.products" class="text-center py-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading products...</span>
+              </div>
+              <span class="ms-2">Loading products...</span>
+            </div>
+
+            <div *ngIf="!isLoading.products">
+              <div class="mb-3">
+                <label class="form-label">Filter Products</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Search by name, SKU or category"
+                  (input)="searchProducts($event)"
+                />
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 40%">Product</th>
+                      <th style="width: 15%">Price</th>
+                      <th style="width: 15%">Quantity</th>
+                      <th style="width: 20%">Total</th>
+                      <th style="width: 10%">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="items">
+                    <tr
+                      *ngFor="
+                        let item of itemsFormArray.controls;
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                    >
+                      <td>
+                        <select
+                          formControlName="productId"
+                          class="form-select"
+                          [class.is-invalid]="
+                            item.get('productId')?.touched &&
+                            item.get('productId')?.invalid
+                          "
+                          (change)="onProductChange(i, $event)"
+                        >
+                          <option value="">Select a product</option>
+                          <option
+                            *ngFor="let product of filteredProducts"
+                            [value]="product.id"
+                          >
+                            {{ product.name }} ({{ product.stockQuantity }} in
+                            stock)
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            item.get('productId')?.touched &&
+                            item.get('productId')?.invalid
+                          "
+                          class="invalid-feedback"
+                        >
+                          Please select a product
+                        </div>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="number"
+                            formControlName="price"
+                            class="form-control"
+                            readonly
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          formControlName="quantity"
+                          class="form-control"
+                          min="1"
+                          [class.is-invalid]="
+                            item.get('quantity')?.touched &&
+                            item.get('quantity')?.invalid
+                          "
+                          (input)="onQuantityChange(i, $event)"
+                        />
+                        <div
+                          *ngIf="
+                            item.get('quantity')?.touched &&
+                            item.get('quantity')?.invalid
+                          "
+                          class="invalid-feedback"
+                        >
+                          Quantity must be at least 1
+                        </div>
+                      </td>
+                      <td>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input
+                            type="number"
+                            formControlName="totalPrice"
+                            class="form-control"
+                            readonly
+                          />
+                        </div>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          [disabled]="itemsFormArray.length <= 1"
+                          (click)="removeItem(i)"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="col-12 text-end">
+        <button
+          type="button"
+          class="btn btn-outline-secondary me-2"
+          [routerLink]="['/orders']"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="orderForm.invalid || isSubmitting"
+        >
+          <span
+            *ngIf="isSubmitting"
+            class="spinner-border spinner-border-sm me-1"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Create Order
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

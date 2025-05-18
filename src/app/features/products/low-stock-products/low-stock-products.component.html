@@ -1,0 +1,129 @@
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Low Stock Products</h1>
+      <p class="text-muted">Products that need to be restocked soon</p>
+    </div>
+    <div>
+      <a [routerLink]="['/products']" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Products
+      </a>
+    </div>
+  </div>
+  
+  <!-- Threshold Control -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h5 class="card-title mb-0">Stock Threshold</h5>
+          <p class="text-muted small">Set the threshold to display products with stock below this value</p>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1 me-3">
+              <input 
+                type="range" 
+                class="form-range" 
+                min="1" 
+                max="50" 
+                [(ngModel)]="thresholdValue" 
+                id="thresholdRange"
+              >
+            </div>
+            <div class="threshold-value me-3">
+              <span class="badge bg-primary">{{ thresholdValue }}</span>
+            </div>
+            <button class="btn btn-primary" (click)="updateThreshold()">Apply</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Products Table -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <!-- Error Alert -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      
+      <!-- Products List -->
+      <div *ngIf="!isLoading">
+        <div *ngIf="lowStockProducts.length === 0" class="text-center py-5">
+          <i class="bi bi-box-seam fs-1 text-muted"></i>
+          <p class="mt-2">No low stock products found</p>
+          <p class="text-muted">Try increasing the threshold value</p>
+        </div>
+        
+        <div *ngIf="lowStockProducts.length > 0" class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of lowStockProducts">
+                <td>{{ product.id }}</td>
+                <td>
+                  <div class="product-thumbnail">
+                    <img 
+                      *ngIf="product.imageUrl" 
+                      [src]="product.imageUrl" 
+                      [alt]="product.name" 
+                      class="img-thumbnail"
+                    >
+                    <div *ngIf="!product.imageUrl" class="no-image-placeholder">
+                      <i class="bi bi-image"></i>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
+                </td>
+                <td>{{ product.sku || 'N/A' }}</td>
+                <td>{{ product.category || 'Uncategorized' }}</td>
+                <td>${{ product.price | number:'1.2-2' }}</td>
+                <td>
+                  <span 
+                    class="badge" 
+                    [ngClass]="{'bg-danger': product.stockQuantity < 5, 'bg-warning': product.stockQuantity >= 5}"
+                  >
+                    {{ product.stockQuantity }}
+                  </span>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <a [routerLink]="['/products', product.id]" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a [routerLink]="['/products/edit', product.id]" class="btn btn-sm btn-outline-success">
+                      <i class="bi bi-plus-lg"></i> Restock
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

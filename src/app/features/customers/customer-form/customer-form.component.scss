@@ -1,0 +1,41 @@
+.page-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  
+  .page-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  color: #6c757d;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-switch {
+  margin-top: 0.5rem;
+  
+  .form-check-input {
+    height: 1.5rem;
+    width: 3rem;
+    margin-top: 0;
+  }
+  
+  .form-check-label {
+    padding-top: 0.25rem;
+    margin-left: 0.5rem;
+  }
+}

@@ -1,0 +1,53 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h3 class="text-center">Stock Management</h3>
+  </div>
+  
+  <div class="user-profile text-center mb-4">
+    <div class="user-avatar">
+      <i class="bi bi-person-circle fs-1"></i>
+    </div>
+    <div class="user-info mt-2">
+      <h6 class="mb-0">Admin User</h6>
+      <small class="text-muted">Administrator</small>
+    </div>
+  </div>
+  
+  <ul class="nav flex-column">
+    <li class="nav-item" *ngFor="let item of menuItems; let i = index">
+      <a 
+        *ngIf="!item.subItems" 
+        [routerLink]="item.route" 
+        routerLinkActive="active"
+        class="nav-link"
+      >
+        <i class="bi me-2" [ngClass]="item.icon"></i>
+        {{ item.title }}
+      </a>
+      
+      <div *ngIf="item.subItems" class="submenu-container">
+        <a 
+          class="nav-link"
+          [ngClass]="{'active': isMenuExpanded(i)}"
+          (click)="toggleSubmenu(i)"
+        >
+          <i class="bi me-2" [ngClass]="item.icon"></i>
+          {{ item.title }}
+          <i class="bi ms-auto" [ngClass]="isMenuExpanded(i) ? 'bi-chevron-down' : 'bi-chevron-right'"></i>
+        </a>
+        
+        <ul class="submenu" [ngClass]="{'show': isMenuExpanded(i)}">
+          <li *ngFor="let subItem of item.subItems">
+            <a 
+              [routerLink]="subItem.route" 
+              routerLinkActive="active"
+              class="nav-link sub-link"
+            >
+              {{ subItem.title }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</div>

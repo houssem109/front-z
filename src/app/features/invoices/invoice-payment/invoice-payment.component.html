@@ -1,0 +1,259 @@
+<!-- src/app/features/invoices/invoice-payment/invoice-payment.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Process Payment</h1>
+      <p class="text-muted">Process payment for invoice</p>
+    </div>
+    <div>
+      <a [routerLink]="['/invoices', invoice?.id]" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Invoice
+      </a>
+    </div>
+  </div>
+  
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  
+  <!-- Payment Form -->
+  <div *ngIf="!isLoading && invoice" class="row">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Payment Details</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+            <!-- Payment Method Selection -->
+            <div class="mb-4">
+              <label class="form-label">Payment Method</label>
+              <div class="d-flex gap-3 payment-methods">
+                <div 
+                  *ngFor="let method of paymentMethods" 
+                  class="payment-method-card"
+                  [class.active]="paymentForm.get('paymentMethod')?.value === method.id"
+                  (click)="paymentForm.get('paymentMethod')?.setValue(method.id); onPaymentMethodChange(method.id)"
+                >
+                  <div class="payment-method-icon">
+                    <i 
+                      class="bi" 
+                      [ngClass]="{
+                        'bi-credit-card': method.id === 'credit-card',
+                        'bi-bank': method.id === 'bank-transfer',
+                        'bi-paypal': method.id === 'paypal',
+                        'bi-cash': method.id === 'cash'
+                      }"
+                    ></i>
+                  </div>
+                  <div class="payment-method-name">{{ method.name }}</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Credit Card Fields -->
+            <div *ngIf="paymentForm.get('paymentMethod')?.value === 'credit-card'" class="payment-details-section">
+              <h6 class="section-title">Credit Card Details</h6>
+              
+              <div class="mb-3">
+                <label for="cardNumber" class="form-label">Card Number</label>
+                <input 
+                  type="text" 
+                  id="cardNumber" 
+                  formControlName="cardNumber"
+                  class="form-control" 
+                  placeholder="1234567890123456"
+                  [ngClass]="{'is-invalid': paymentForm.get('cardNumber')?.touched && paymentForm.get('cardNumber')?.invalid}"
+                >
+                <div *ngIf="paymentForm.get('cardNumber')?.touched && paymentForm.get('cardNumber')?.invalid" class="invalid-feedback">
+                  Please enter a valid 16-digit card number
+                </div>
+              </div>
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="cardExpiry" class="form-label">Expiration Date (MM/YY)</label>
+                  <input 
+                    type="text" 
+                    id="cardExpiry" 
+                    formControlName="cardExpiry"
+                    class="form-control" 
+                    placeholder="MM/YY"
+                    [ngClass]="{'is-invalid': paymentForm.get('cardExpiry')?.touched && paymentForm.get('cardExpiry')?.invalid}"
+                  >
+                  <div *ngIf="paymentForm.get('cardExpiry')?.touched && paymentForm.get('cardExpiry')?.invalid" class="invalid-feedback">
+                    Please enter a valid expiration date in MM/YY format
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="cardCvv" class="form-label">CVV</label>
+                  <input 
+                    type="text" 
+                    id="cardCvv" 
+                    formControlName="cardCvv"
+                    class="form-control" 
+                    placeholder="123"
+                    [ngClass]="{'is-invalid': paymentForm.get('cardCvv')?.touched && paymentForm.get('cardCvv')?.invalid}"
+                  >
+                  <div *ngIf="paymentForm.get('cardCvv')?.touched && paymentForm.get('cardCvv')?.invalid" class="invalid-feedback">
+                    Please enter a valid CVV code
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Bank Transfer Fields -->
+            <div *ngIf="paymentForm.get('paymentMethod')?.value === 'bank-transfer'" class="payment-details-section">
+              <h6 class="section-title">Bank Transfer Details</h6>
+              
+              <div class="mb-3">
+                <label for="accountNumber" class="form-label">Account Number</label>
+                <input 
+                  type="text" 
+                  id="accountNumber" 
+                  formControlName="accountNumber"
+                  class="form-control" 
+                  [ngClass]="{'is-invalid': paymentForm.get('accountNumber')?.touched && paymentForm.get('accountNumber')?.invalid}"
+                >
+                <div *ngIf="paymentForm.get('accountNumber')?.touched && paymentForm.get('accountNumber')?.invalid" class="invalid-feedback">
+                  Please enter your account number
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="routingNumber" class="form-label">Routing Number</label>
+                <input 
+                  type="text" 
+                  id="routingNumber" 
+                  formControlName="routingNumber"
+                  class="form-control" 
+                  [ngClass]="{'is-invalid': paymentForm.get('routingNumber')?.touched && paymentForm.get('routingNumber')?.invalid}"
+                >
+                <div *ngIf="paymentForm.get('routingNumber')?.touched && paymentForm.get('routingNumber')?.invalid" class="invalid-feedback">
+                  Please enter your routing number
+                </div>
+              </div>
+            </div>
+            
+            <!-- PayPal Fields -->
+            <div *ngIf="paymentForm.get('paymentMethod')?.value === 'paypal'" class="payment-details-section">
+              <h6 class="section-title">PayPal Details</h6>
+              
+              <div class="mb-3">
+                <label for="paypalEmail" class="form-label">PayPal Email</label>
+                <input 
+                  type="email" 
+                  id="paypalEmail" 
+                  formControlName="paypalEmail"
+                  class="form-control" 
+                  [ngClass]="{'is-invalid': paymentForm.get('paypalEmail')?.touched && paymentForm.get('paypalEmail')?.invalid}"
+                >
+                <div *ngIf="paymentForm.get('paypalEmail')?.touched && paymentForm.get('paypalEmail')?.invalid" class="invalid-feedback">
+                  Please enter a valid email address
+                </div>
+              </div>
+            </div>
+            
+            <!-- Cash Fields -->
+            <div *ngIf="paymentForm.get('paymentMethod')?.value === 'cash'" class="payment-details-section">
+              <h6 class="section-title">Cash Payment</h6>
+              
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                Please provide the cash payment to the store or delivery person.
+              </div>
+            </div>
+            
+            <!-- Notes -->
+            <div class="mb-3">
+              <label for="notes" class="form-label">Payment Notes (Optional)</label>
+              <textarea 
+                id="notes" 
+                formControlName="notes"
+                class="form-control" 
+                rows="3"
+              ></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="paymentForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Process Payment
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Invoice Summary -->
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Invoice Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <div class="detail-label">Invoice Number:</div>
+            <div class="detail-value">{{ invoice.invoiceNumber }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Order Number:</div>
+            <div class="detail-value">#{{ invoice.orderId }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Issue Date:</div>
+            <div class="detail-value">{{ invoice.issuedDate | date:'mediumDate' }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Due Date:</div>
+            <div class="detail-value" [ngClass]="{'text-danger': isInvoiceOverdue(invoice)}">
+              {{ invoice.dueDate | date:'mediumDate' }}
+              <span *ngIf="isInvoiceOverdue(invoice)" class="badge bg-danger ms-2">Overdue</span>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <div class="detail-item">
+            <div class="detail-label">Subtotal:</div>
+            <div class="detail-value">${{ invoice.subtotal | number:'1.2-2' }}</div>
+          </div>
+          
+          <div class="detail-item" *ngIf="invoice.tax">
+            <div class="detail-label">Tax:</div>
+            <div class="detail-value">${{ invoice.tax | number:'1.2-2' }}</div>
+          </div>
+          
+          <div class="detail-item" *ngIf="invoice.shippingCost">
+            <div class="detail-label">Shipping:</div>
+            <div class="detail-value">${{ invoice.shippingCost | number:'1.2-2' }}</div>
+          </div>
+          
+          <div class="detail-item total">
+            <div class="detail-label">Total:</div>
+            <div class="detail-value">${{ invoice.total | number:'1.2-2' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

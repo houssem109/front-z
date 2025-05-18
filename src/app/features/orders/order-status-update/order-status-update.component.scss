@@ -1,0 +1,133 @@
+/* src/app/features/orders/order-status-update/order-status-update.component.scss */
+.page-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  
+  .page-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.current-status {
+  .badge {
+    font-size: 1rem;
+    padding: 0.5em 0.75em;
+  }
+}
+
+// Status Timeline
+.status-timeline {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    width: 2px;
+    background: #e9ecef;
+    z-index: 0;
+  }
+  
+  .timeline-item {
+    position: relative;
+    padding-left: 40px;
+    padding-bottom: 1.5rem;
+    
+    &:last-child {
+      padding-bottom: 0;
+    }
+    
+    .timeline-badge {
+      position: absolute;
+      left: 0;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      background: #fff;
+      border-radius: 50%;
+      
+      i {
+        font-size: 1.25rem;
+        color: #6c757d;
+      }
+    }
+    
+    .timeline-content {
+      h6 {
+        margin-bottom: 0.25rem;
+      }
+    }
+    
+    &.active {
+      .timeline-badge i {
+        color: #007bff;
+      }
+      
+      .timeline-content h6 {
+        color: #007bff;
+        font-weight: 600;
+      }
+    }
+    
+    &.completed {
+      .timeline-badge i {
+        color: #28a745;
+      }
+    }
+  }
+}
+
+.detail-item {
+  margin-bottom: 0.75rem;
+  
+  .detail-label {
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+  }
+  
+  .detail-value {
+    font-size: 1.1rem;
+  }
+}
+
+.status-info-list {
+  list-style: none;
+  padding-left: 0;
+  
+  li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    
+    .badge {
+      flex-shrink: 0;
+    }
+  }
+}
+
+hr {
+  margin: 1.5rem 0;
+  opacity: 0.1;
+}
+
+.invalid-feedback {
+  display: block;
+}

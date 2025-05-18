@@ -1,0 +1,144 @@
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Customers</h1>
+      <p class="text-muted">Manage your customer database</p>
+    </div>
+    <div>
+      <a [routerLink]="['/customers/new']" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Customer
+      </a>
+    </div>
+  </div>
+  
+  <!-- Filters Section -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Filters</h5>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="searchTerm" class="form-label">Search Customers</label>
+          <input 
+            type="text" 
+            id="searchTerm" 
+            class="form-control" 
+            placeholder="Search by name, email or phone" 
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+          >
+        </div>
+        
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="form-check">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="showInactive" 
+              [(ngModel)]="showInactiveCustomers"
+              (change)="applyFilters()"
+            >
+            <label class="form-check-label" for="showInactive">
+              Show inactive customers
+            </label>
+          </div>
+        </div>
+        
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-secondary w-100" (click)="clearFilters()">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Customers Table -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      
+      <div *ngIf="!isLoading">
+        <div *ngIf="filteredCustomers.length === 0" class="text-center py-5">
+          <i class="bi bi-people fs-1 text-muted"></i>
+          <p class="mt-2">No customers found</p>
+          <a [routerLink]="['/customers/new']" class="btn btn-outline-primary mt-2">
+            Add Customer
+          </a>
+        </div>
+        
+        <div *ngIf="filteredCustomers.length > 0" class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let customer of filteredCustomers" [ngClass]="{'table-secondary': customer.isActive === false}">
+                <td>{{ customer.id }}</td>
+                <td>
+                  <a [routerLink]="['/customers', customer.id]">
+                    {{ customer.firstName }} {{ customer.lastName }}
+                  </a>
+                </td>
+                <td>
+                  <a href="mailto:{{ customer.email }}">{{ customer.email }}</a>
+                </td>
+                <td>{{ customer.phone || 'N/A' }}</td>
+                <td>
+                  <span *ngIf="customer.city">{{ customer.city }}, {{ customer.country || 'N/A' }}</span>
+                  <span *ngIf="!customer.city">N/A</span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="customer.isActive !== false ? 'bg-success' : 'bg-danger'">
+                    {{ customer.isActive !== false ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <a [routerLink]="['/customers', customer.id]" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a [routerLink]="['/customers/edit', customer.id]" class="btn btn-sm btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <button 
+                      *ngIf="customer.isActive !== false" 
+                      (click)="deactivateCustomer(customer.id)" 
+                      class="btn btn-sm btn-outline-warning"
+                      title="Deactivate Customer"
+                    >
+                      <i class="bi bi-person-x"></i>
+                    </button>
+                    <button 
+                      (click)="deleteCustomer(customer.id)" 
+                      class="btn btn-sm btn-outline-danger"
+                      title="Delete Customer"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<!-- src/app/features/orders/order-status-update/order-status-update.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Update Order Status</h1>
+      <p class="text-muted">Change the status of the order</p>
+    </div>
+    <div>
+      <a [routerLink]="['/orders', order?.id]" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Order
+      </a>
+    </div>
+  </div>
+  
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  
+  <!-- Content -->
+  <div *ngIf="!isLoading && order" class="row">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Order Status</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="statusForm" (ngSubmit)="onSubmit()">
+            <!-- Current Status -->
+            <div class="current-status mb-4">
+              <label class="form-label">Current Status</label>
+              <div>
+                <span class="badge" [ngClass]="getOrderStatusClass(order.status!)">
+                  {{ order.status }}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Status Timeline -->
+            <div class="status-timeline mb-4">
+              <div 
+                *ngFor="let status of ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED']" 
+                class="timeline-item"
+                [ngClass]="{
+                  'active': order.status === status,
+                  'completed': isStatusCompleted(status, order.status)
+                }"
+              >
+                <div class="timeline-badge">
+                  <i 
+                    class="bi" 
+                    [ngClass]="{
+                      'bi-circle': order.status !== status && !isStatusCompleted(status, order.status),
+                      'bi-check-circle-fill': isStatusCompleted(status, order.status),
+                      'bi-circle-fill': order.status === status
+                    }"
+                  ></i>
+                </div>
+                <div class="timeline-content">
+                  <h6>{{ status }}</h6>
+                  <p *ngIf="order.status === status" class="mb-0 text-muted">Current Status</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- New Status Selection -->
+            <div class="mb-4">
+              <label for="status" class="form-label">New Status</label>
+              <select 
+                id="status" 
+                formControlName="status"
+                class="form-select"
+                [class.is-invalid]="statusForm.get('status')?.touched && statusForm.get('status')?.invalid"
+              >
+                <option *ngFor="let status of orderStatusValues" [value]="status">{{ status }}</option>
+              </select>
+              <div *ngIf="statusForm.get('status')?.touched && statusForm.get('status')?.invalid" class="invalid-feedback">
+                Please select a status
+              </div>
+            </div>
+            
+            <!-- Status Notes -->
+            <div class="mb-4">
+              <label for="notes" class="form-label">Status Update Notes (Optional)</label>
+              <textarea 
+                id="notes" 
+                formControlName="notes"
+                class="form-control" 
+                rows="3"
+                placeholder="Enter any notes about this status change..."
+              ></textarea>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="statusForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Update Status
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <div class="detail-label">Order Number:</div>
+            <div class="detail-value">#{{ order.id }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Order Date:</div>
+            <div class="detail-value">{{ order.orderDate | date:'mediumDate' }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Customer:</div>
+            <div class="detail-value">
+              <a [routerLink]="['/customers', order.customerId]">
+                {{ order.customerName || 'Customer #' + order.customerId }}
+              </a>
+            </div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Items:</div>
+            <div class="detail-value">{{ order.items.length }}</div>
+          </div>
+          
+          <div class="detail-item">
+            <div class="detail-label">Total:</div>
+            <div class="detail-value">${{ order.totalAmount | number:'1.2-2' }}</div>
+          </div>
+          
+          <hr>
+          
+          <div class="status-instructions mt-3">
+            <h6>Status Instructions</h6>
+            <ul class="status-info-list">
+              <li>
+                <span class="badge bg-warning me-2">PENDING</span>
+                Order received, awaiting processing
+              </li>
+              <li>
+                <span class="badge bg-info me-2">PROCESSING</span>
+                Order confirmed, being prepared for shipment
+              </li>
+              <li>
+                <span class="badge bg-primary me-2">SHIPPED</span>
+                Order has been shipped to the customer
+              </li>
+              <li>
+                <span class="badge bg-success me-2">DELIVERED</span>
+                Order successfully delivered to the customer
+              </li>
+              <li>
+                <span class="badge bg-danger me-2">CANCELLED</span>
+                Order has been cancelled
+              </li>
+              <li>
+                <span class="badge bg-secondary me-2">RETURNED</span>
+                Order has been returned by the customer
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

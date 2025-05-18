@@ -1,0 +1,102 @@
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #343a40;
+  color: #fff;
+  padding: 1rem;
+  overflow-y: auto;
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1rem;
+  
+  h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.3rem;
+  }
+}
+
+.user-profile {
+  padding: 10px 0;
+  
+  .user-avatar {
+    color: #fff;
+  }
+  
+  .user-info {
+    h6 {
+      color: #fff;
+    }
+  }
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  
+  &:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  &.active {
+    color: #fff;
+    background-color: #007bff;
+  }
+  
+  i.bi-chevron-right, i.bi-chevron-down {
+    margin-left: auto;
+  }
+}
+
+.submenu-container {
+  .nav-link {
+    justify-content: space-between;
+  }
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 2.5rem;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  padding-left: 0;
+  
+  &.show {
+    height: auto;
+  }
+  
+  li {
+    margin-bottom: 0.25rem;
+  }
+  
+  .sub-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 1.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    
+    &:hover {
+      color: #fff;
+    }
+    
+    &.active {
+      color: #fff;
+      background-color: rgba(0, 123, 255, 0.7);
+    }
+  }
+}

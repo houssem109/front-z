@@ -1,0 +1,269 @@
+<!-- src/app/features/invoices/invoice-detail/invoice-detail.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div
+    class="page-header d-flex justify-content-between align-items-center print-hide"
+  >
+    <div>
+      <h1 class="page-title">Invoice Details</h1>
+      <p class="text-muted">View and manage invoice information</p>
+    </div>
+    <div>
+      <a [routerLink]="['/invoices']" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left me-1"></i> Back to Invoices
+      </a>
+      <div class="btn-group">
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Actions
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><h6 class="dropdown-header">Payment Status</h6></li>
+          <li *ngIf="invoice?.paymentStatus !== 'PENDING'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.PENDING)"
+            >
+              Mark as Pending
+            </button>
+          </li>
+          <li *ngIf="invoice?.paymentStatus !== 'PAID'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.PAID)"
+            >
+              Mark as Paid
+            </button>
+          </li>
+          <li *ngIf="invoice?.paymentStatus !== 'FAILED'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.FAILED)"
+            >
+              Mark as Failed
+            </button>
+          </li>
+          <li *ngIf="invoice?.paymentStatus !== 'REFUNDED'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.REFUNDED)"
+            >
+              Mark as Refunded
+            </button>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <button class="dropdown-item" (click)="printInvoice()">
+              <i class="bi bi-printer me-2"></i> Print Invoice
+            </button>
+          </li>
+          <li *ngIf="invoice?.orderId as orderId">
+            <a class="dropdown-item" [routerLink]="['/orders', orderId]">
+              <i class="bi bi-cart3 me-2"></i> View Order
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading.invoice" class="text-center py-5 print-hide">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger print-hide">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Invoice Details -->
+  <div *ngIf="!isLoading.invoice && invoice" class="invoice-container">
+    <!-- Invoice Header -->
+    <div class="invoice-header">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="company-info">
+            <h2 class="company-name">Your Company Name</h2>
+            <p class="company-address">
+              123 Business Street<br />
+              City, State ZIP<br />
+              Phone: (123) 456-7890<br />
+              Email: info&#64;yourcompany.com
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <h1 class="invoice-title">INVOICE</h1>
+          <p class="invoice-number">{{ invoice.invoiceNumber }}</p>
+          <div class="invoice-status print-hide">
+            <span
+              class="badge"
+              [ngClass]="getPaymentStatusClass(invoice.paymentStatus)"
+            >
+              {{ invoice.paymentStatus }}
+            </span>
+            <span *ngIf="isInvoiceOverdue(invoice)" class="badge bg-danger ms-2"
+              >Overdue</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Dates -->
+    <div class="invoice-dates">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="date-group">
+            <div class="date-label">Issue Date:</div>
+            <div class="date-value">
+              {{ invoice.issuedDate | date : "mediumDate" }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="date-group">
+            <div class="date-label">Due Date:</div>
+            <div
+              class="date-value"
+              [ngClass]="{ 'text-danger': isInvoiceOverdue(invoice) }"
+            >
+              {{ invoice.dueDate | date : "mediumDate" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Information -->
+    <div class="invoice-customer" *ngIf="order">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="customer-info">
+            <h5 class="info-title">Bill To:</h5>
+            <div class="info-content">
+              <p class="customer-name">{{ order.customerName }}</p>
+              <p class="customer-email">{{ order.customerEmail }}</p>
+              <p class="customer-address" *ngIf="order.billingAddress">
+                {{ order.billingAddress }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="order-info">
+            <h5 class="info-title">Order Information:</h5>
+            <div class="info-content">
+              <div class="detail-row">
+                <div class="detail-label">Order Number:</div>
+                <div class="detail-value">
+                  <a [routerLink]="['/orders', order.id]" class="print-hide"
+                    >#{{ order.id }}</a
+                  >
+                  <span class="print-only">#{{ order.id }}</span>
+                </div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Order Date:</div>
+                <div class="detail-value">
+                  {{ order.orderDate | date : "mediumDate" }}
+                </div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Payment Method:</div>
+                <div class="detail-value">
+                  {{ order.paymentMethod || "N/A" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Items -->
+    <div class="invoice-items">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th class="text-end">Price</th>
+              <th class="text-center">Quantity</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="order && order.items">
+              <tr *ngFor="let item of order.items">
+                <td>
+                  <div class="item-name">
+                    {{ item.productName || "Product #" + item.productId }}
+                  </div>
+                  <div class="item-sku" *ngIf="item.productSku">
+                    SKU: {{ item.productSku }}
+                  </div>
+                </td>
+                <td class="text-end">${{ item.price | number : "1.2-2" }}</td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-end">
+                  ${{ item.totalPrice | number : "1.2-2" }}
+                </td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="!order || !order.items || order.items.length === 0">
+              <td colspan="4" class="text-center">No items found</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="text-end">Subtotal:</td>
+              <td class="text-end">
+                ${{ invoice.subtotal | number : "1.2-2" }}
+              </td>
+            </tr>
+            <tr *ngIf="invoice.tax">
+              <td colspan="3" class="text-end">Tax:</td>
+              <td class="text-end">${{ invoice.tax | number : "1.2-2" }}</td>
+            </tr>
+            <tr *ngIf="invoice.shippingCost">
+              <td colspan="3" class="text-end">Shipping:</td>
+              <td class="text-end">
+                ${{ invoice.shippingCost | number : "1.2-2" }}
+              </td>
+            </tr>
+            <tr class="table-total">
+              <td colspan="3" class="text-end fw-bold">Total:</td>
+              <td class="text-end fw-bold">
+                ${{ invoice.total | number : "1.2-2" }}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Invoice Notes -->
+    <div class="invoice-notes" *ngIf="invoice.notes">
+      <h5 class="notes-title">Notes:</h5>
+      <p class="notes-content">{{ invoice.notes }}</p>
+    </div>
+
+    <!-- Invoice Footer -->
+    <div class="invoice-footer">
+      <div class="footer-content">
+        <p class="mb-0">Thank you for your business!</p>
+        <p class="payment-terms">
+          Payment Terms: Net 30 days. Please make payment by the due date.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

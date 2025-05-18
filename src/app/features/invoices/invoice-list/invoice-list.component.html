@@ -1,0 +1,136 @@
+<!-- src/app/features/invoices/invoice-list/invoice-list.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Invoices</h1>
+      <p class="text-muted">Manage customer invoices</p>
+    </div>
+  </div>
+  
+  <!-- Filters Section -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">Filters</h5>
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label for="paymentStatus" class="form-label">Payment Status</label>
+          <select 
+            id="paymentStatus" 
+            class="form-select" 
+            [(ngModel)]="selectedPaymentStatus" 
+            (change)="applyFilters()"
+          >
+            <option value="">All Statuses</option>
+            <option *ngFor="let status of paymentStatusValues" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+        
+        <div class="col-md-3">
+          <label for="invoiceNumber" class="form-label">Invoice Number</label>
+          <input 
+            type="text" 
+            id="invoiceNumber" 
+            class="form-control" 
+            placeholder="Search by invoice number" 
+            [(ngModel)]="invoiceNumber"
+            (input)="applyFilters()"
+          >
+        </div>
+        
+        <div class="col-md-3 d-flex align-items-end">
+          <div class="form-check">
+            <input 
+              class="form-check-input" 
+              type="checkbox" 
+              id="overdueOnly" 
+              [(ngModel)]="showOverdueOnly"
+              (change)="applyFilters()"
+            >
+            <label class="form-check-label" for="overdueOnly">
+              Show overdue invoices only
+            </label>
+          </div>
+        </div>
+        
+        <div class="col-md-3 d-flex align-items-end">
+          <button class="btn btn-secondary w-100" (click)="clearFilters()">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Invoices Table -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      
+      <div *ngIf="!isLoading">
+        <div *ngIf="filteredInvoices.length === 0" class="text-center py-5">
+          <i class="bi bi-receipt fs-1 text-muted"></i>
+          <p class="mt-2">No invoices found</p>
+        </div>
+        
+        <div *ngIf="filteredInvoices.length > 0" class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Order #</th>
+                <th>Issued Date</th>
+                <th>Due Date</th>
+                <th>Payment Status</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let invoice of filteredInvoices" [ngClass]="{'table-danger': isInvoiceOverdue(invoice)}">
+                <td>
+                  <a [routerLink]="['/invoices', invoice.id]">{{ invoice.invoiceNumber }}</a>
+                </td>
+                <td>
+                  <a [routerLink]="['/orders', invoice.orderId]">#{{ invoice.orderId }}</a>
+                </td>
+                <td>{{ invoice.issuedDate | date:'mediumDate' }}</td>
+                <td>
+                  {{ invoice.dueDate | date:'mediumDate' }}
+                  <span *ngIf="isInvoiceOverdue(invoice)" class="badge bg-danger ms-2">Overdue</span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="getPaymentStatusClass(invoice.paymentStatus)">
+                    {{ invoice.paymentStatus }}
+                  </span>
+                </td>
+                <td>${{ invoice.total | number:'1.2-2' }}</td>
+                <td>
+                  <div class="btn-group">
+                    <a [routerLink]="['/invoices', invoice.id]" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a [routerLink]="['/invoices', invoice.id, 'payment']" class="btn btn-sm btn-outline-success">
+                      <i class="bi bi-cash"></i>
+                    </a>
+                    <a [routerLink]="['/orders', invoice.orderId]" class="btn btn-sm btn-outline-info">
+                      <i class="bi bi-cart3"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

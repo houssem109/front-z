@@ -1,1 +1,101 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+/* Import Bootstrap CSS */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/* Import Bootstrap Icons */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* Global styles */
+body {
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* Custom utility classes */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Custom shadows */
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+
+.shadow {
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+}
+
+/* Font weights */
+.fw-medium {
+  font-weight: 500 !important;
+}
+
+/* Page header styles */
+.page-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.page-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* Card styles */
+.card {
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem 1.25rem;
+}
+
+.card-title {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+/* Badge styles */
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+}
+
+/* Table styles */
+.table th {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Input styles */
+.form-control:focus, .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.invalid-feedback {
+  display: block;
+}
+
+/* Additional responsive styles */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .page-header > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}

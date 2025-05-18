@@ -1,0 +1,382 @@
+<!-- src/app/features/orders/order-detail/order-detail.component.html -->
+<div class="container-fluid p-0">
+  <!-- Page Header -->
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">Order Details</h1>
+      <p class="text-muted">View and manage order information</p>
+    </div>
+    <div>
+      <a [routerLink]="['/orders']" class="btn btn-outline-secondary me-2">
+        <i class="bi bi-arrow-left me-1"></i> Back to Orders
+      </a>
+      <div class="btn-group">
+        <button
+          type="button"
+          class="btn btn-primary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Actions
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><h6 class="dropdown-header">Order Status</h6></li>
+          <li *ngIf="order?.status !== 'PENDING'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.PENDING)"
+            >
+              Mark as Pending
+            </button>
+          </li>
+          <li *ngIf="order?.status !== 'PROCESSING'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.PROCESSING)"
+            >
+              Mark as Processing
+            </button>
+          </li>
+          <li *ngIf="order?.status !== 'SHIPPED'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.SHIPPED)"
+            >
+              Mark as Shipped
+            </button>
+          </li>
+          <li *ngIf="order?.status !== 'DELIVERED'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.DELIVERED)"
+            >
+              Mark as Delivered
+            </button>
+          </li>
+          <li *ngIf="order?.status !== 'CANCELLED'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.CANCELLED)"
+            >
+              Mark as Cancelled
+            </button>
+          </li>
+          <li *ngIf="order?.status !== 'RETURNED'">
+            <button
+              class="dropdown-item"
+              (click)="updateOrderStatus(OrderStatus.RETURNED)"
+            >
+              Mark as Returned
+            </button>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li><h6 class="dropdown-header">Payment Status</h6></li>
+          <li *ngIf="order?.paymentStatus !== 'PENDING'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.PENDING)"
+            >
+              Mark as Pending
+            </button>
+          </li>
+          <li *ngIf="order?.paymentStatus !== 'PAID'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.PAID)"
+            >
+              Mark as Paid
+            </button>
+          </li>
+          <li *ngIf="order?.paymentStatus !== 'FAILED'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.FAILED)"
+            >
+              Mark as Failed
+            </button>
+          </li>
+          <li *ngIf="order?.paymentStatus !== 'REFUNDED'">
+            <button
+              class="dropdown-item"
+              (click)="updatePaymentStatus(PaymentStatus.REFUNDED)"
+            >
+              Mark as Refunded
+            </button>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li *ngIf="order?.invoice as invoice">
+            <a [routerLink]="['/invoices', invoice.id]" class="dropdown-item">
+              <i class="bi bi-receipt me-2"></i> View Invoice
+            </a>
+          </li>
+          <li>
+            <button class="dropdown-item text-danger" (click)="deleteOrder()">
+              <i class="bi bi-trash me-2"></i> Delete Order
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Order Details -->
+  <div *ngIf="!isLoading && order" class="row g-4">
+    <div class="col-md-8">
+      <!-- Order Information Card -->
+      <div class="card shadow-sm mb-4">
+        <div
+          class="card-header bg-white d-flex justify-content-between align-items-center"
+        >
+          <h5 class="card-title mb-0">Order #{{ order.id }}</h5>
+          <div>
+            <span
+              class="badge me-2"
+              [ngClass]="getOrderStatusClass(order.status)"
+            >
+              {{ order.status }}
+            </span>
+            <span
+              class="badge"
+              [ngClass]="getPaymentStatusClass(order.paymentStatus)"
+            >
+              {{ order.paymentStatus }}
+            </span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="detail-item">
+                <div class="detail-label">Order Date</div>
+                <div class="detail-value">
+                  {{ order.orderDate | date : "medium" }}
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <div class="detail-label">Customer</div>
+                <div class="detail-value">
+                  <a [routerLink]="['/customers', order.customerId]">
+                    {{ order.customerName || "Customer #" + order.customerId }}
+                  </a>
+                  <span
+                    *ngIf="order.customerEmail"
+                    class="text-muted d-block"
+                    >{{ order.customerEmail }}</span
+                  >
+                </div>
+              </div>
+
+              <div class="detail-item" *ngIf="order.paymentMethod">
+                <div class="detail-label">Payment Method</div>
+                <div class="detail-value">{{ order.paymentMethod }}</div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="detail-item" *ngIf="order.shippingAddress">
+                <div class="detail-label">Shipping Address</div>
+                <div class="detail-value">{{ order.shippingAddress }}</div>
+              </div>
+
+              <div class="detail-item" *ngIf="order.billingAddress">
+                <div class="detail-label">Billing Address</div>
+                <div class="detail-value">{{ order.billingAddress }}</div>
+              </div>
+
+              <div class="detail-item" *ngIf="order.notes">
+                <div class="detail-label">Notes</div>
+                <div class="detail-value">{{ order.notes }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Items Card -->
+      <div class="card shadow-sm">
+        <div
+          class="card-header bg-white d-flex justify-content-between align-items-center"
+        >
+          <h5 class="card-title mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th class="text-end">Price</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.items">
+                  <td>
+                    <a [routerLink]="['/products', item.productId]">
+                      {{ item.productName || "Product #" + item.productId }}
+                    </a>
+                  </td>
+                  <td>{{ item.productSku || "N/A" }}</td>
+                  <td class="text-end">${{ item.price | number : "1.2-2" }}</td>
+                  <td class="text-center">{{ item.quantity }}</td>
+                  <td class="text-end">
+                    ${{ item.totalPrice | number : "1.2-2" }}
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot class="table-group-divider">
+                <tr>
+                  <td colspan="4" class="text-end fw-bold">Subtotal:</td>
+                  <td class="text-end">
+                    ${{ calculateSubtotal() | number : "1.2-2" }}
+                  </td>
+                </tr>
+                <tr *ngIf="order.tax">
+                  <td colspan="4" class="text-end">Tax:</td>
+                  <td class="text-end">${{ order.tax | number : "1.2-2" }}</td>
+                </tr>
+                <tr *ngIf="order.shippingCost">
+                  <td colspan="4" class="text-end">Shipping:</td>
+                  <td class="text-end">
+                    ${{ order.shippingCost | number : "1.2-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="text-end fw-bold">Total:</td>
+                  <td class="text-end fw-bold">
+                    ${{ order.totalAmount | number : "1.2-2" }}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- Order Status Card -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <h5 class="card-title mb-0">Order Status</h5>
+        </div>
+        <div class="card-body">
+          <div class="status-timeline">
+            <div
+              *ngFor="
+                let status of ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED']
+              "
+              class="timeline-item"
+              [ngClass]="{
+                active: order.status === status,
+                completed: isStatusCompleted(status, order.status)
+              }"
+            >
+              <div class="timeline-badge">
+                <i
+                  class="bi"
+                  [ngClass]="{
+                    'bi-circle':
+                      order.status !== status &&
+                      !isStatusCompleted(status, order.status),
+                    'bi-check-circle-fill': isStatusCompleted(
+                      status,
+                      order.status
+                    ),
+                    'bi-circle-fill': order.status === status
+                  }"
+                ></i>
+              </div>
+              <div class="timeline-content">
+                <h6>{{ status }}</h6>
+                <p *ngIf="order.status === status" class="mb-0 text-muted">
+                  Current Status
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cancelled-status" *ngIf="order.status === 'CANCELLED'">
+            <div class="alert alert-danger mb-0">
+              <i class="bi bi-x-circle-fill me-2"></i>
+              <strong>Order Cancelled</strong>
+            </div>
+          </div>
+
+          <div class="cancelled-status" *ngIf="order.status === 'RETURNED'">
+            <div class="alert alert-secondary mb-0">
+              <i class="bi bi-arrow-counterclockwise me-2"></i>
+              <strong>Order Returned</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Summary Card -->
+      <div class="card shadow-sm mb-4" *ngIf="order.invoice">
+        <div
+          class="card-header bg-white d-flex justify-content-between align-items-center"
+        >
+          <h5 class="card-title mb-0">Invoice</h5>
+          <span
+            class="badge"
+            [ngClass]="getPaymentStatusClass(order.invoice.paymentStatus)"
+          >
+            {{ order.invoice.paymentStatus }}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <div class="detail-label">Invoice Number</div>
+            <div class="detail-value">{{ order.invoice.invoiceNumber }}</div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-label">Issued Date</div>
+            <div class="detail-value">
+              {{ order.invoice.issuedDate | date : "mediumDate" }}
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-label">Due Date</div>
+            <div class="detail-value">
+              {{ order.invoice.dueDate | date : "mediumDate" }}
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <div class="detail-label">Total Amount</div>
+            <div class="detail-value fw-bold">
+              ${{ order.invoice.total | number : "1.2-2" }}
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <a
+              [routerLink]="['/invoices', order.invoice.id]"
+              class="btn btn-outline-primary"
+            >
+              <i class="bi bi-receipt me-1"></i> View Invoice
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
