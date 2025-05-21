@@ -207,3 +207,47 @@
 .print-only {
   display: none;
 }
+@media print {
+  /* Make sure this component and its content is visible */
+  app-invoice-detail,
+  .invoice-container,
+  .invoice-container * {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Hide elements with print-hide class */
+  .print-hide {
+    display: none !important;
+  }
+  
+  /* Show elements with print-only class */
+  .print-only {
+    display: block !important;
+  }
+  
+  /* Apply print-specific styling */
+  .invoice-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  .table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  
+  th, td {
+    padding: 8px !important;
+  }
+  
+  /* Avoid page breaks inside critical elements */
+  .invoice-items,
+  .invoice-items table,
+  .invoice-items table tbody,
+  .invoice-items table tfoot {
+    page-break-inside: avoid !important;
+  }
+}

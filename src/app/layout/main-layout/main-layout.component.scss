@@ -1,3 +1,4 @@
+/* src/app/layout/main-layout/main-layout.component.scss */
 .main-container {
   display: flex;
   width: 100%;
@@ -120,5 +121,69 @@
   .sidebar {
     transform: translateX(-100%);
     z-index: 1001;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+  
+  .main-container {
+    display: block !important;
+    min-height: auto !important;
+    
+    app-sidebar, 
+    .sidebar,
+    .print-hide {
+      display: none !important;
+    }
+  }
+  
+  .content-area {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  
+  .navbar {
+    display: none !important;
+  }
+  
+  .main-content {
+    padding: 0 !important;
+  }
+  
+  /* Make sure only the invoice is printed */
+  .main-content > *:not(router-outlet):not(app-invoice-detail),
+  router-outlet ~ * {
+    display: block !important;
+    width: 100% !important;
+  }
+  
+  app-invoice-detail .invoice-container {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Hide other components */
+  app-dashboard, 
+  app-product-list,
+  app-product-detail,
+  app-product-form,
+  app-customer-list,
+  app-customer-detail,
+  app-customer-form,
+  app-order-list,
+  app-order-detail,
+  app-order-form,
+  app-invoice-list,
+  app-invoice-payment {
+    display: none !important;
   }
 }
