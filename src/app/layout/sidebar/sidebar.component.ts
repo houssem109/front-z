@@ -23,7 +23,7 @@ export class SidebarComponent {
       subItems: [
         { title: 'All Products', route: '/products' },
         { title: 'Add Product', route: '/products/new' },
-        { title: 'Low Stock', route: '/products/low-stock' }
+        { title: 'Low Stock', route: '/low-stock' }
       ]
     },
     { 

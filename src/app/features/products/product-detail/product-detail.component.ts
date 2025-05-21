@@ -34,7 +34,7 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
-  loadProduct(id: number): void {
+  loadProduct(id: number ): void {
     this.isLoading = true;
     this.productService.getProductById(id).subscribe({
       next: (product) => {

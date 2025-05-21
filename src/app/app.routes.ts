@@ -34,7 +34,7 @@ export const routes: Routes = [
   { path: 'products/new', component: ProductFormComponent },
   { path: 'products/edit/:id', component: ProductFormComponent },
   { path: 'products/:id', component: ProductDetailComponent },
-  { path: 'products/low-stock', component: LowStockProductsComponent },
+  { path: 'low-stock', component: LowStockProductsComponent },
   
   // Customer routes
   { path: 'customers', component: CustomerListComponent },
