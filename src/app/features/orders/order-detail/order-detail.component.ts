@@ -6,6 +6,7 @@ import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models/order.model';
 import { OrderStatus } from '../../../core/models/enums/order-status.enum';
 import { PaymentStatus } from '../../../core/models/enums/payment-status.enum';
+import { Invoice } from '../../../core/models/invoice.model';
 
 @Component({
   selector: 'app-order-detail',
@@ -15,7 +16,7 @@ import { PaymentStatus } from '../../../core/models/enums/payment-status.enum';
   styleUrls: ['./order-detail.component.scss']
 })
 export class OrderDetailComponent implements OnInit {
-    OrderStatus = OrderStatus;
+  OrderStatus = OrderStatus;
   PaymentStatus = PaymentStatus;
   order: Order | null = null;
   isLoading = true;
@@ -143,6 +144,7 @@ export class OrderDetailComponent implements OnInit {
       return total + (item.totalPrice || 0);
     }, 0);
   }
+
   isStatusCompleted(status: string, currentStatus: OrderStatus | undefined): boolean {
     if (!currentStatus) return false;
     
@@ -161,5 +163,17 @@ export class OrderDetailComponent implements OnInit {
     const currentStatusIndex = statusOrder.indexOf(currentStatus);
     
     return statusIndex < currentStatusIndex;
+  }
+
+  // Add this missing function to check if an invoice is overdue
+  isInvoiceOverdue(invoice: Invoice | undefined): boolean {
+    if (!invoice || !invoice.dueDate || invoice.paymentStatus === PaymentStatus.PAID) {
+      return false;
+    }
+    
+    const today = new Date();
+    const dueDate = new Date(invoice.dueDate);
+    
+    return dueDate < today;
   }
 }

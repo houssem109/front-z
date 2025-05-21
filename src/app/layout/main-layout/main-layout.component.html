@@ -5,20 +5,24 @@
   <!-- Main content -->
   <div class="content-area">
     <!-- Top navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
       <div class="container-fluid">
         <button 
-          class="navbar-toggler border-0" 
+          class="navbar-toggler" 
           type="button" 
           (click)="toggleSidebar()"
         >
           <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-list' : 'bi-x-lg'"></i>
         </button>
         
+        <div class="d-none d-lg-block">
+          <h5 class="mb-0 text-primary fw-bold">Inventory Management System</h5>
+        </div>
+        
         <div class="ms-auto d-flex align-items-center">
           <div class="dropdown me-3">
             <a 
-              class="nav-link position-relative" 
+              class="nav-link position-relative p-2" 
               href="#" 
               id="notificationsDropdown" 
               role="button" 
@@ -30,32 +34,37 @@
                 2
               </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationsDropdown">
-              <h6 class="dropdown-header">Notifications</h6>
-              <a class="dropdown-item py-2" href="#">
-                <div class="d-flex align-items-center">
-                  <div class="flex-shrink-0">
-                    <i class="bi bi-exclamation-circle-fill text-warning"></i>
+            <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationsDropdown" style="min-width: 320px;">
+              <div class="p-3 border-bottom">
+                <h6 class="mb-0 fw-bold">Notifications</h6>
+              </div>
+              <div class="p-2">
+                <a class="dropdown-item p-2 rounded" href="#">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-warning p-2 rounded-circle">
+                      <i class="bi bi-exclamation-triangle text-white"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                      <p class="mb-0 fw-medium">Low stock alert: Product X</p>
+                      <small class="text-muted">1 hour ago</small>
+                    </div>
                   </div>
-                  <div class="flex-grow-1 ms-2">
-                    <p class="mb-0">Low stock alert: Product X</p>
-                    <small class="text-muted">1 hour ago</small>
+                </a>
+                <a class="dropdown-item p-2 rounded" href="#">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-success p-2 rounded-circle">
+                      <i class="bi bi-check-circle text-white"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-2">
+                      <p class="mb-0 fw-medium">New order received: #1234</p>
+                      <small class="text-muted">3 hours ago</small>
+                    </div>
                   </div>
-                </div>
-              </a>
-              <a class="dropdown-item py-2" href="#">
-                <div class="d-flex align-items-center">
-                  <div class="flex-shrink-0">
-                    <i class="bi bi-check-circle-fill text-success"></i>
-                  </div>
-                  <div class="flex-grow-1 ms-2">
-                    <p class="mb-0">New order received: #1234</p>
-                    <small class="text-muted">3 hours ago</small>
-                  </div>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item text-center" href="#">View all notifications</a>
+                </a>
+              </div>
+              <div class="p-2 border-top text-center">
+                <a class="dropdown-item text-primary fw-medium" href="#">View all notifications</a>
+              </div>
             </div>
           </div>
           
@@ -68,14 +77,16 @@
               data-bs-toggle="dropdown" 
               aria-expanded="false"
             >
-              <i class="bi bi-person-circle me-2 fs-5"></i>
-              <span>Admin</span>
+              <div class="me-2 bg-light rounded-circle p-2">
+                <i class="bi bi-person-fill text-primary"></i>
+              </div>
+              <span class="fw-medium">Admin</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
               <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
               <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+              <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
             </ul>
           </div>
         </div>

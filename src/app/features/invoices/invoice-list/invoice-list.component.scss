@@ -1,40 +1,122 @@
 /* src/app/features/invoices/invoice-list/invoice-list.component.scss */
-.page-header {
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e9ecef;
-  
-  .page-title {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
+.filter-card {
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
 
-.card {
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
+.payment-badge {
+  display: inline-block;
+  padding: 0.4em 0.85em;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  
+  &.bg-warning, &.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+  
+  &.bg-success, &.paid {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+  
+  &.bg-danger, &.failed {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+  
+  &.bg-info, &.refunded {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+  }
 }
 
 .table {
-  margin-bottom: 0;
-  
   th {
     font-weight: 600;
-    color: #6c757d;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    padding: 1rem 1.5rem;
+    background-color: rgba(67, 97, 238, 0.02);
   }
   
   td {
+    padding: 1rem 1.5rem;
     vertical-align: middle;
+  }
+  
+  .bg-danger-subtle {
+    background-color: rgba(239, 68, 68, 0.05) !important;
   }
 }
 
 .btn-group {
   .btn {
-    border-radius: 4px;
     margin-right: 0.25rem;
     
     &:last-child {
       margin-right: 0;
     }
+  }
+}
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  
+  i {
+    font-size: 4rem;
+    color: var(--text-muted);
+    opacity: 0.3;
+    margin-bottom: 1rem;
+  }
+  
+  h5 {
+    font-weight: 600;
+  }
+  
+  p {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.form-switch {
+  .form-check-input {
+    height: 1.25rem;
+    width: 2.5rem;
+    cursor: pointer;
+    
+    &:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+  }
+  
+  .form-check-label {
+    cursor: pointer;
+  }
+}
+
+/* Floating labels styling */
+.form-floating {
+  > label {
+    padding: 0.75rem 1rem;
+  }
+  
+  > .form-control {
+    padding: 0.75rem 1rem;
+    height: calc(3.5rem + 2px);
+  }
+  
+  > .form-select {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    height: calc(3.5rem + 2px);
   }
 }

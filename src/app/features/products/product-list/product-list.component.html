@@ -13,147 +13,155 @@
   </div>
   
   <!-- Filters Section -->
-  <div class="card shadow-sm mb-4">
+  <div class="card filter-card mb-4">
     <div class="card-body">
-      <h5 class="card-title mb-3">Filters</h5>
+      <h5 class="card-title mb-3 d-flex align-items-center">
+        <i class="bi bi-funnel me-2 text-primary"></i>
+        Filters
+      </h5>
       <div class="row g-3">
         <div class="col-md-4">
-          <label for="searchTerm" class="form-label">Search Products</label>
-          <input 
-            type="text" 
-            id="searchTerm" 
-            class="form-control" 
-            placeholder="Search by name or description" 
-            [(ngModel)]="searchTerm"
-            (input)="applyFilters()"
-          >
+          <div class="form-floating">
+            <input 
+              type="text" 
+              id="searchTerm" 
+              class="form-control" 
+              placeholder="Search products" 
+              [(ngModel)]="searchTerm"
+              (input)="applyFilters()"
+            >
+            <label for="searchTerm">Search Products</label>
+          </div>
         </div>
         
         <div class="col-md-2">
-          <label for="category" class="form-label">Category</label>
-          <select 
-            id="category" 
-            class="form-select" 
-            [(ngModel)]="selectedCategory" 
-            (change)="applyFilters()"
-          >
-            <option value="">All Categories</option>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-          </select>
+          <div class="form-floating">
+            <select 
+              id="category" 
+              class="form-select" 
+              [(ngModel)]="selectedCategory" 
+              (change)="applyFilters()"
+            >
+              <option value="">All Categories</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+            <label for="category">Category</label>
+          </div>
         </div>
         
         <div class="col-md-2">
-          <label for="minPrice" class="form-label">Min Price</label>
-          <input 
-            type="number" 
-            id="minPrice" 
-            class="form-control" 
-            placeholder="Min" 
-            [(ngModel)]="minPrice" 
-            (input)="applyFilters()"
-          >
+          <div class="form-floating">
+            <input 
+              type="number" 
+              id="minPrice" 
+              class="form-control" 
+              placeholder="Min Price" 
+              [(ngModel)]="minPrice" 
+              (input)="applyFilters()"
+            >
+            <label for="minPrice">Min Price</label>
+          </div>
         </div>
         
         <div class="col-md-2">
-          <label for="maxPrice" class="form-label">Max Price</label>
-          <input 
-            type="number" 
-            id="maxPrice" 
-            class="form-control" 
-            placeholder="Max" 
-            [(ngModel)]="maxPrice" 
-            (input)="applyFilters()"
-          >
+          <div class="form-floating">
+            <input 
+              type="number" 
+              id="maxPrice" 
+              class="form-control" 
+              placeholder="Max Price" 
+              [(ngModel)]="maxPrice" 
+              (input)="applyFilters()"
+            >
+            <label for="maxPrice">Max Price</label>
+          </div>
         </div>
         
-        <div class="col-md-2 d-flex align-items-end">
-          <button class="btn btn-secondary w-100" (click)="clearFilters()">
-            Clear Filters
+        <div class="col-md-2 d-flex align-items-center">
+          <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+            <i class="bi bi-x-circle me-1"></i> Clear Filters
           </button>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- Products Table -->
-  <div class="card shadow-sm">
-    <div class="card-body">
+  <!-- Products Grid/Table View -->
+  <div class="card">
+    <div class="card-body p-0">
       <div *ngIf="isLoading" class="text-center py-5">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
+        <p class="mt-2 text-muted">Loading products...</p>
       </div>
       
       <div *ngIf="!isLoading">
         <div *ngIf="filteredProducts.length === 0" class="text-center py-5">
-          <i class="bi bi-box-seam fs-1 text-muted"></i>
-          <p class="mt-2">No products found</p>
-          <a [routerLink]="['/products/new']" class="btn btn-outline-primary mt-2">
-            Add Product
-          </a>
+          <div class="empty-state">
+            <i class="bi bi-box-seam fs-1 text-muted"></i>
+            <h5 class="mt-3">No products found</h5>
+            <p class="text-muted mb-4">Try adjusting your filters or add a new product</p>
+            <a [routerLink]="['/products/new']" class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1"></i> Add Product
+            </a>
+          </div>
         </div>
         
-        <div *ngIf="filteredProducts.length > 0" class="table-responsive">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>SKU</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let product of filteredProducts">
-                <td>{{ product.id }}</td>
-                <td>
-                  <div class="product-thumbnail">
-                    <img 
-                      *ngIf="product.imageUrl" 
-                      [src]="product.imageUrl" 
-                      [alt]="product.name" 
-                      class="img-thumbnail"
-                    >
-                    <div *ngIf="!product.imageUrl" class="no-image-placeholder">
-                      <i class="bi bi-image"></i>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a [routerLink]="['/products', product.id]">{{ product.name }}</a>
-                  <small *ngIf="product.description" class="text-muted d-block">{{ product.description | slice:0:50 }}{{ product.description && product.description.length > 50 ? '...' : '' }}</small>
-                </td>
-                <td>{{ product.category }}</td>
-                <td>{{ product.sku }}</td>
-                <td>${{ product.price | number:'1.2-2' }}</td>
-                <td>
-                  <span 
-                    class="badge" 
-                    [ngClass]="{'bg-danger': product.stockQuantity < 10, 'bg-warning': product.stockQuantity >= 10 && product.stockQuantity < 20, 'bg-success': product.stockQuantity >= 20}"
+        <!-- Products Grid -->
+        <div *ngIf="filteredProducts.length > 0" class="product-grid px-3 py-3">
+          <div class="row g-4">
+            <div *ngFor="let product of filteredProducts" class="col-md-6 col-lg-4 col-xl-3">
+              <div class="product-card">
+                <div class="product-image">
+                  <img 
+                    *ngIf="product.imageUrl" 
+                    [src]="product.imageUrl" 
+                    [alt]="product.name" 
+                    class="img-fluid"
                   >
-                    {{ product.stockQuantity }}
-                  </span>
-                </td>
-                <td>
-                  <div class="btn-group">
+                  <div *ngIf="!product.imageUrl" class="no-image">
+                    <i class="bi bi-image"></i>
+                  </div>
+                  
+                  <div class="stock-badge" 
+                    [ngClass]="{
+                      'bg-danger': product.stockQuantity < 10, 
+                      'bg-warning': product.stockQuantity >= 10 && product.stockQuantity < 20, 
+                      'bg-success': product.stockQuantity >= 20
+                    }"
+                  >
+                    <span>{{ product.stockQuantity }} in stock</span>
+                  </div>
+                </div>
+                
+                <div class="product-info">
+                  <h6 class="product-category" *ngIf="product.category">{{ product.category }}</h6>
+                  <h5 class="product-name">{{ product.name }}</h5>
+                  <p *ngIf="product.description" class="product-description">
+                    {{ product.description | slice:0:60 }}{{ product.description && product.description.length > 60 ? '...' : '' }}
+                  </p>
+                  
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="product-sku" *ngIf="product.sku">SKU: {{ product.sku }}</span>
+                    <span class="product-price">${{ product.price | number:'1.2-2' }}</span>
+                  </div>
+                  
+                  <div class="product-actions">
                     <a [routerLink]="['/products', product.id]" class="btn btn-sm btn-outline-primary">
-                      <i class="bi bi-eye"></i>
+                      <i class="bi bi-eye"></i> View
                     </a>
                     <a [routerLink]="['/products/edit', product.id]" class="btn btn-sm btn-outline-secondary">
-                      <i class="bi bi-pencil"></i>
+                      <i class="bi bi-pencil"></i> Edit
                     </a>
                     <button (click)="deleteProduct(product.id)" class="btn btn-sm btn-outline-danger">
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

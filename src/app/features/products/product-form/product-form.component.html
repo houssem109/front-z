@@ -1,8 +1,16 @@
+<!-- src/app/features/products/product-form/product-form.component.html -->
 <div class="container-fluid p-0">
   <!-- Page Header -->
-  <div class="page-header">
-    <h1 class="page-title">{{ isEditMode ? 'Edit' : 'Add' }} Product</h1>
-    <p class="text-muted">{{ isEditMode ? 'Update product information' : 'Create a new product' }}</p>
+  <div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="page-title">{{ isEditMode ? 'Edit' : 'Add' }} Product</h1>
+      <p class="text-muted">{{ isEditMode ? 'Update product information' : 'Create a new product' }}</p>
+    </div>
+    <div>
+      <a [routerLink]="['/products']" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Products
+      </a>
+    </div>
   </div>
   
   <!-- Loading Spinner -->
@@ -10,132 +18,184 @@
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
+    <p class="mt-2 text-muted">Loading product information...</p>
   </div>
   
   <!-- Error Alert -->
   <div *ngIf="errorMessage" class="alert alert-danger">
-    {{ errorMessage }}
+    <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ errorMessage }}
   </div>
   
   <!-- Product Form -->
   <div *ngIf="!isLoading" class="card shadow-sm">
-    <div class="card-body">
+    <div class="card-body p-4">
       <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-        <div class="row g-3">
-          <!-- Product Name -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
-              <input 
-                type="text" 
-                id="name" 
-                formControlName="name"
-                class="form-control" 
-                [ngClass]="{'is-invalid': f['name'].touched && f['name'].errors}"
-              >
-              <div *ngIf="f['name'].touched && f['name'].errors" class="invalid-feedback">
-                <span *ngIf="f['name'].errors['required']">Product name is required</span>
-                <span *ngIf="f['name'].errors['maxlength']">Product name must be at most 100 characters</span>
+        <div class="row g-4">
+          <div class="col-md-8">
+            <div class="card form-section-card">
+              <div class="card-header">
+                <h5 class="card-title mb-0 d-flex align-items-center">
+                  <i class="bi bi-info-circle text-primary me-2"></i>
+                  Basic Information
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <!-- Product Name -->
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input 
+                        type="text" 
+                        id="name" 
+                        formControlName="name"
+                        class="form-control" 
+                        placeholder="Product Name"
+                        [ngClass]="{'is-invalid': f['name'].touched && f['name'].errors}"
+                      >
+                      <label for="name">Product Name <span class="text-danger">*</span></label>
+                      <div *ngIf="f['name'].touched && f['name'].errors" class="invalid-feedback">
+                        <span *ngIf="f['name'].errors['required']">Product name is required</span>
+                        <span *ngIf="f['name'].errors['maxlength']">Product name must be at most 100 characters</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- SKU -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input 
+                        type="text" 
+                        id="sku" 
+                        formControlName="sku"
+                        class="form-control"
+                        placeholder="SKU"
+                      >
+                      <label for="sku">SKU</label>
+                    </div>
+                  </div>
+                  
+                  <!-- Category -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <select 
+                        id="category" 
+                        formControlName="category"
+                        class="form-select"
+                        placeholder="Category"
+                      >
+                        <option value="">Select a category</option>
+                        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                      </select>
+                      <label for="category">Category</label>
+                    </div>
+                  </div>
+                  
+                  <!-- Description -->
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <textarea 
+                        id="description" 
+                        formControlName="description"
+                        class="form-control" 
+                        style="height: 120px"
+                        placeholder="Description"
+                      ></textarea>
+                      <label for="description">Description</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card form-section-card mt-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0 d-flex align-items-center">
+                  <i class="bi bi-tag text-primary me-2"></i>
+                  Pricing & Inventory
+                </h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <!-- Price -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input 
+                        type="number" 
+                        id="price" 
+                        formControlName="price"
+                        class="form-control" 
+                        placeholder="Price"
+                        step="0.01" 
+                        [ngClass]="{'is-invalid': f['price'].touched && f['price'].errors}"
+                      >
+                      <label for="price">Price ($) <span class="text-danger">*</span></label>
+                      <div *ngIf="f['price'].touched && f['price'].errors" class="invalid-feedback">
+                        <span *ngIf="f['price'].errors['required']">Price is required</span>
+                        <span *ngIf="f['price'].errors['min']">Price must be a positive number</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Stock Quantity -->
+                  <div class="col-md-6">
+                    <div class="form-floating">
+                      <input 
+                        type="number" 
+                        id="stockQuantity" 
+                        formControlName="stockQuantity"
+                        class="form-control" 
+                        placeholder="Stock Quantity"
+                        [ngClass]="{'is-invalid': f['stockQuantity'].touched && f['stockQuantity'].errors}"
+                      >
+                      <label for="stockQuantity">Stock Quantity <span class="text-danger">*</span></label>
+                      <div *ngIf="f['stockQuantity'].touched && f['stockQuantity'].errors" class="invalid-feedback">
+                        <span *ngIf="f['stockQuantity'].errors['required']">Stock quantity is required</span>
+                        <span *ngIf="f['stockQuantity'].errors['min']">Stock quantity must be a positive number</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           
-          <!-- SKU -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="sku" class="form-label">SKU</label>
-              <input 
-                type="text" 
-                id="sku" 
-                formControlName="sku"
-                class="form-control"
-              >
-            </div>
-          </div>
-          
-          <!-- Price -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
-              <input 
-                type="number" 
-                id="price" 
-                formControlName="price"
-                class="form-control" 
-                step="0.01" 
-                [ngClass]="{'is-invalid': f['price'].touched && f['price'].errors}"
-              >
-              <div *ngIf="f['price'].touched && f['price'].errors" class="invalid-feedback">
-                <span *ngIf="f['price'].errors['required']">Price is required</span>
-                <span *ngIf="f['price'].errors['min']">Price must be a positive number</span>
+          <div class="col-md-4">
+            <div class="card form-section-card h-100">
+              <div class="card-header">
+                <h5 class="card-title mb-0 d-flex align-items-center">
+                  <i class="bi bi-image text-primary me-2"></i>
+                  Product Image
+                </h5>
               </div>
-            </div>
-          </div>
-          
-          <!-- Stock Quantity -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="stockQuantity" class="form-label">Stock Quantity <span class="text-danger">*</span></label>
-              <input 
-                type="number" 
-                id="stockQuantity" 
-                formControlName="stockQuantity"
-                class="form-control" 
-                [ngClass]="{'is-invalid': f['stockQuantity'].touched && f['stockQuantity'].errors}"
-              >
-              <div *ngIf="f['stockQuantity'].touched && f['stockQuantity'].errors" class="invalid-feedback">
-                <span *ngIf="f['stockQuantity'].errors['required']">Stock quantity is required</span>
-                <span *ngIf="f['stockQuantity'].errors['min']">Stock quantity must be a positive number</span>
+              <div class="card-body">
+                <!-- Image URL -->
+                <div class="form-floating mb-3">
+                  <input 
+                    type="text" 
+                    id="imageUrl" 
+                    formControlName="imageUrl"
+                    class="form-control"
+                    placeholder="Image URL"
+                  >
+                  <label for="imageUrl">Image URL</label>
+                </div>
+                
+                <!-- Preview Image -->
+                <div class="image-preview-container" *ngIf="f['imageUrl'].value">
+                  <label class="form-label text-muted small">Image Preview</label>
+                  <div class="image-preview">
+                    <img [src]="f['imageUrl'].value" alt="Product Image Preview">
+                  </div>
+                </div>
+                
+                <div class="no-image-preview" *ngIf="!f['imageUrl'].value">
+                  <div class="no-image-placeholder">
+                    <i class="bi bi-image"></i>
+                    <p>No image URL provided</p>
+                    <p class="small text-muted">Enter an image URL above to see a preview</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          
-          <!-- Category -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="category" class="form-label">Category</label>
-              <select 
-                id="category" 
-                formControlName="category"
-                class="form-select"
-              >
-                <option value="">Select a category</option>
-                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-              </select>
-            </div>
-          </div>
-          
-          <!-- Image URL -->
-          <div class="col-md-6">
-            <div class="form-group mb-3">
-              <label for="imageUrl" class="form-label">Image URL</label>
-              <input 
-                type="text" 
-                id="imageUrl" 
-                formControlName="imageUrl"
-                class="form-control"
-              >
-            </div>
-          </div>
-          
-          <!-- Description -->
-          <div class="col-12">
-            <div class="form-group mb-3">
-              <label for="description" class="form-label">Description</label>
-              <textarea 
-                id="description" 
-                formControlName="description"
-                class="form-control" 
-                rows="4"
-              ></textarea>
-            </div>
-          </div>
-          
-          <!-- Preview Image -->
-          <div class="col-12 mb-3" *ngIf="f['imageUrl'].value">
-            <label class="form-label">Image Preview</label>
-            <div class="image-preview">
-              <img [src]="f['imageUrl'].value" alt="Product Image Preview">
             </div>
           </div>
           

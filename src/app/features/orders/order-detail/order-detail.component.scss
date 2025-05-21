@@ -1,46 +1,120 @@
 /* src/app/features/orders/order-detail/order-detail.component.scss */
-.page-header {
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e9ecef;
+.status-badge, .payment-badge {
+  display: inline-block;
+  padding: 0.35em 0.85em;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge {
+  &.bg-warning, &.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
   
-  .page-title {
-    font-weight: 600;
-    margin-bottom: 0.25rem;
+  &.bg-info, &.processing {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+  }
+  
+  &.bg-primary, &.shipped {
+    background-color: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+  }
+  
+  &.bg-success, &.delivered {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+  
+  &.bg-danger, &.cancelled {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+  
+  &.bg-secondary, &.returned {
+    background-color: rgba(107, 114, 128, 0.1);
+    color: var(--text-muted);
   }
 }
 
-.card {
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
+.payment-badge {
+  &.bg-warning, &.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+  
+  &.bg-success, &.paid {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+  
+  &.bg-danger, &.failed {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+  
+  &.bg-info, &.refunded {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+  }
 }
 
-.detail-item {
-  margin-bottom: 1rem;
+.info-group {
+  margin-bottom: 1.25rem;
   
-  .detail-label {
+  .info-label {
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #6c757d;
+    color: var(--text-muted);
+    text-transform: uppercase;
     margin-bottom: 0.25rem;
   }
   
-  .detail-value {
-    color: #212529;
+  .info-value {
+    color: var(--text-dark);
+    
+    a {
+      color: var(--primary-color);
+    }
   }
 }
 
 .table {
   th {
     font-weight: 600;
-    color: #6c757d;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--text-muted);
+    padding: 1rem 1.5rem;
+    background-color: rgba(67, 97, 238, 0.02);
   }
   
   td {
+    padding: 1rem 1.5rem;
     vertical-align: middle;
   }
   
   tfoot {
-    font-weight: 500;
+    background-color: var(--bg-light);
+    
+    td {
+      padding: 0.75rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      
+      &.fw-bold {
+        color: var(--text-dark);
+      }
+    }
+    
+    .table-total td {
+      border-top: 2px solid var(--border-color);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
   }
 }
 
@@ -57,7 +131,7 @@
     bottom: 0;
     left: 15px;
     width: 2px;
-    background: #e9ecef;
+    background: var(--border-color);
     z-index: 0;
   }
   
@@ -77,40 +151,72 @@
       height: 30px;
       line-height: 30px;
       text-align: center;
-      background: #fff;
+      background: var(--bg-white);
       border-radius: 50%;
       
       i {
         font-size: 1.25rem;
-        color: #6c757d;
+        color: var(--text-muted);
       }
     }
     
     .timeline-content {
       h6 {
         margin-bottom: 0.25rem;
+        font-weight: 500;
       }
     }
     
     &.active {
       .timeline-badge i {
-        color: #007bff;
+        color: var(--primary-color);
       }
       
       .timeline-content h6 {
-        color: #007bff;
+        color: var(--primary-color);
         font-weight: 600;
       }
     }
     
     &.completed {
       .timeline-badge i {
-        color: #28a745;
+        color: var(--success);
       }
     }
   }
 }
 
-.cancelled-status {
-  margin-top: 1rem;
+.status-alert {
+  .alert {
+    border-radius: 12px;
+    
+    i {
+      opacity: 0.8;
+    }
+  }
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 0.75rem 0;
+  
+  .dropdown-header {
+    font-weight: 600;
+    color: var(--text-dark);
+    padding: 0.5rem 1.25rem;
+  }
+  
+  .dropdown-item {
+    padding: 0.6rem 1.25rem;
+    
+    &:hover {
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    &.text-danger:hover {
+      background-color: rgba(239, 68, 68, 0.05);
+    }
+  }
 }

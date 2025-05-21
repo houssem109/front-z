@@ -8,13 +8,10 @@
   <!-- Summary Cards -->
   <div class="row mt-4">
     <div class="col-md-6 col-lg-3 mb-4">
-      <div class="card shadow-sm h-100">
+      <div class="card dashboard-card h-100">
         <div class="card-body">
           <div *ngIf="isLoading.summaryData" class="text-center">
-            <div
-              class="spinner-border spinner-border-sm text-primary"
-              role="status"
-            >
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
@@ -23,28 +20,24 @@
               <i class="bi bi-box-seam text-white"></i>
             </div>
             <div class="flex-grow-1 ms-3">
-              <h6 class="card-title text-muted mb-0">Total Products</h6>
-              <h2 class="mt-2 mb-0">{{ totalProducts }}</h2>
+              <h6 class="card-subtitle text-muted mb-1">Total Products</h6>
+              <h2 class="card-title mb-0 fw-bold">{{ totalProducts }}</h2>
             </div>
           </div>
-          <div class="mt-3">
-            <a [routerLink]="['/products']" class="text-primary"
-              >View all products <i class="bi bi-arrow-right"></i
-            ></a>
+          <div class="mt-4 pt-3 border-top">
+            <a [routerLink]="['/products']" class="btn btn-sm btn-link text-primary p-0">
+              View all products <i class="bi bi-arrow-right ms-1"></i>
+            </a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Continue with similar patterns for other summary cards -->
     <div class="col-md-6 col-lg-3 mb-4">
-      <div class="card shadow-sm h-100">
+      <div class="card dashboard-card h-100">
         <div class="card-body">
           <div *ngIf="isLoading.summaryData" class="text-center">
-            <div
-              class="spinner-border spinner-border-sm text-primary"
-              role="status"
-            >
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
@@ -53,27 +46,24 @@
               <i class="bi bi-people text-white"></i>
             </div>
             <div class="flex-grow-1 ms-3">
-              <h6 class="card-title text-muted mb-0">Total Customers</h6>
-              <h2 class="mt-2 mb-0">{{ totalCustomers }}</h2>
+              <h6 class="card-subtitle text-muted mb-1">Total Customers</h6>
+              <h2 class="card-title mb-0 fw-bold">{{ totalCustomers }}</h2>
             </div>
           </div>
-          <div class="mt-3">
-            <a [routerLink]="['/customers']" class="text-success"
-              >View all customers <i class="bi bi-arrow-right"></i
-            ></a>
+          <div class="mt-4 pt-3 border-top">
+            <a [routerLink]="['/customers']" class="btn btn-sm btn-link text-success p-0">
+              View all customers <i class="bi bi-arrow-right ms-1"></i>
+            </a>
           </div>
         </div>
       </div>
     </div>
 
     <div class="col-md-6 col-lg-3 mb-4">
-      <div class="card shadow-sm h-100">
+      <div class="card dashboard-card h-100">
         <div class="card-body">
           <div *ngIf="isLoading.summaryData" class="text-center">
-            <div
-              class="spinner-border spinner-border-sm text-primary"
-              role="status"
-            >
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
@@ -82,27 +72,24 @@
               <i class="bi bi-cart3 text-white"></i>
             </div>
             <div class="flex-grow-1 ms-3">
-              <h6 class="card-title text-muted mb-0">Total Orders</h6>
-              <h2 class="mt-2 mb-0">{{ totalOrders }}</h2>
+              <h6 class="card-subtitle text-muted mb-1">Total Orders</h6>
+              <h2 class="card-title mb-0 fw-bold">{{ totalOrders }}</h2>
             </div>
           </div>
-          <div class="mt-3">
-            <a [routerLink]="['/orders']" class="text-info"
-              >View all orders <i class="bi bi-arrow-right"></i
-            ></a>
+          <div class="mt-4 pt-3 border-top">
+            <a [routerLink]="['/orders']" class="btn btn-sm btn-link text-info p-0">
+              View all orders <i class="bi bi-arrow-right ms-1"></i>
+            </a>
           </div>
         </div>
       </div>
     </div>
 
     <div class="col-md-6 col-lg-3 mb-4">
-      <div class="card shadow-sm h-100">
+      <div class="card dashboard-card h-100">
         <div class="card-body">
           <div *ngIf="isLoading.summaryData" class="text-center">
-            <div
-              class="spinner-border spinner-border-sm text-primary"
-              role="status"
-            >
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
@@ -111,14 +98,14 @@
               <i class="bi bi-currency-dollar text-white"></i>
             </div>
             <div class="flex-grow-1 ms-3">
-              <h6 class="card-title text-muted mb-0">Total Revenue</h6>
-              <h2 class="mt-2 mb-0">${{ totalRevenue | number : "1.2-2" }}</h2>
+              <h6 class="card-subtitle text-muted mb-1">Total Revenue</h6>
+              <h2 class="card-title mb-0 fw-bold">${{ totalRevenue | number : "1.2-2" }}</h2>
             </div>
           </div>
-          <div class="mt-3">
-            <a [routerLink]="['/invoices']" class="text-warning"
-              >View all invoices <i class="bi bi-arrow-right"></i
-            ></a>
+          <div class="mt-4 pt-3 border-top">
+            <a [routerLink]="['/invoices']" class="btn btn-sm btn-link text-warning p-0">
+              View all invoices <i class="bi bi-arrow-right ms-1"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -129,18 +116,17 @@
   <div class="row mt-2">
     <!-- Low Stock Products -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div
-          class="card-header bg-white d-flex justify-content-between align-items-center"
-        >
-          <h5 class="card-title mb-0">Low Stock Products</h5>
-          <a
-            [routerLink]="['/products/low-stock']"
-            class="btn btn-sm btn-outline-primary"
-            >View All</a
-          >
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+            Low Stock Products
+          </h5>
+          <a [routerLink]="['/low-stock']" class="btn btn-sm btn-outline-primary rounded-pill">
+            View All
+          </a>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <div *ngIf="isLoading.lowStock" class="text-center py-4">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -148,34 +134,36 @@
           </div>
 
           <div *ngIf="!isLoading.lowStock">
-            <div *ngIf="lowStockProducts.length === 0" class="text-center py-4">
-              <i class="bi bi-box-seam fs-1 text-muted"></i>
-              <p class="mt-2">No low stock products found</p>
+            <div *ngIf="lowStockProducts.length === 0" class="text-center py-5">
+              <div class="empty-state">
+                <i class="bi bi-box-seam fs-1 text-muted"></i>
+                <p class="mt-2">No low stock products found</p>
+              </div>
             </div>
 
             <div *ngIf="lowStockProducts.length > 0" class="table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <thead>
                   <tr>
                     <th>Product</th>
                     <th>Category</th>
                     <th>Price</th>
-                    <th>Stock</th>
+                    <th class="text-center">Stock</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let product of lowStockProducts">
                     <td>
-                      <a [routerLink]="['/products', product.id]">{{
-                        product.name
-                      }}</a>
+                      <a [routerLink]="['/products', product.id]" class="text-decoration-none fw-medium">
+                        {{ product.name }}
+                      </a>
                     </td>
-                    <td>{{ product.category }}</td>
-                    <td>${{ product.price | number : "1.2-2" }}</td>
                     <td>
-                      <span class="badge bg-danger">{{
-                        product.stockQuantity
-                      }}</span>
+                      <span class="badge bg-light text-dark">{{ product.category || 'Uncategorized' }}</span>
+                    </td>
+                    <td>${{ product.price | number : "1.2-2" }}</td>
+                    <td class="text-center">
+                      <span class="badge bg-danger rounded-pill px-3">{{ product.stockQuantity }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -188,16 +176,17 @@
 
     <!-- Recent Orders -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm h-100">
-        <div
-          class="card-header bg-white d-flex justify-content-between align-items-center"
-        >
-          <h5 class="card-title mb-0">Recent Orders</h5>
-          <a [routerLink]="['/orders']" class="btn btn-sm btn-outline-primary"
-            >View All</a
-          >
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 d-flex align-items-center">
+            <i class="bi bi-clock-history text-info me-2"></i>
+            Recent Orders
+          </h5>
+          <a [routerLink]="['/orders']" class="btn btn-sm btn-outline-primary rounded-pill">
+            View All
+          </a>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <div *ngIf="isLoading.recentOrders" class="text-center py-4">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -205,38 +194,37 @@
           </div>
 
           <div *ngIf="!isLoading.recentOrders">
-            <div *ngIf="recentOrders.length === 0" class="text-center py-4">
-              <i class="bi bi-cart3 fs-1 text-muted"></i>
-              <p class="mt-2">No recent orders found</p>
+            <div *ngIf="recentOrders.length === 0" class="text-center py-5">
+              <div class="empty-state">
+                <i class="bi bi-cart3 fs-1 text-muted"></i>
+                <p class="mt-2">No recent orders found</p>
+              </div>
             </div>
 
             <div *ngIf="recentOrders.length > 0" class="table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <thead>
                   <tr>
                     <th>Order #</th>
                     <th>Customer</th>
                     <th>Status</th>
-                    <th>Total</th>
+                    <th class="text-end">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let order of recentOrders">
                     <td>
-                      <a [routerLink]="['/orders', order.id]"
-                        >#{{ order.id }}</a
-                      >
+                      <a [routerLink]="['/orders', order.id]" class="text-decoration-none fw-medium">
+                        #{{ order.id }}
+                      </a>
                     </td>
                     <td>{{ order.customerName }}</td>
                     <td>
-                      <span
-                        class="badge"
-                        [ngClass]="getOrderStatusClass(order.status)"
-                      >
+                      <span class="badge" [ngClass]="getOrderStatusClass(order.status)">
                         {{ order.status }}
                       </span>
                     </td>
-                    <td>${{ order.totalAmount | number : "1.2-2" }}</td>
+                    <td class="text-end fw-medium">${{ order.totalAmount | number : "1.2-2" }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -250,16 +238,17 @@
   <!-- Overdue Invoices -->
   <div class="row mt-2">
     <div class="col-12 mb-4">
-      <div class="card shadow-sm">
-        <div
-          class="card-header bg-white d-flex justify-content-between align-items-center"
-        >
-          <h5 class="card-title mb-0">Overdue Invoices</h5>
-          <a [routerLink]="['/invoices']" class="btn btn-sm btn-outline-primary"
-            >View All</a
-          >
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 d-flex align-items-center">
+            <i class="bi bi-calendar-x text-danger me-2"></i>
+            Overdue Invoices
+          </h5>
+          <a [routerLink]="['/invoices']" class="btn btn-sm btn-outline-primary rounded-pill">
+            View All
+          </a>
         </div>
-        <div class="card-body">
+        <div class="card-body p-0">
           <div *ngIf="isLoading.overdueInvoices" class="text-center py-4">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -267,13 +256,16 @@
           </div>
 
           <div *ngIf="!isLoading.overdueInvoices">
-            <div *ngIf="overdueInvoices.length === 0" class="text-center py-4">
-              <i class="bi bi-receipt fs-1 text-muted"></i>
-              <p class="mt-2">No overdue invoices found</p>
+            <div *ngIf="overdueInvoices.length === 0" class="text-center py-5">
+              <div class="empty-state">
+                <i class="bi bi-receipt fs-1 text-muted"></i>
+                <p class="mt-2">No overdue invoices found</p>
+                <p class="text-muted">All payments are up to date!</p>
+              </div>
             </div>
 
             <div *ngIf="overdueInvoices.length > 0" class="table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover mb-0">
                 <thead>
                   <tr>
                     <th>Invoice #</th>
@@ -281,42 +273,35 @@
                     <th>Due Date</th>
                     <th>Payment Status</th>
                     <th>Total</th>
-                    <th>Actions</th>
+                    <th class="text-end">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let invoice of overdueInvoices">
                     <td>
-                      <a [routerLink]="['/invoices', invoice.id]">{{
-                        invoice.invoiceNumber
-                      }}</a>
+                      <a [routerLink]="['/invoices', invoice.id]" class="text-decoration-none fw-medium">
+                        {{ invoice.invoiceNumber }}
+                      </a>
                     </td>
                     <td>
-                      <a [routerLink]="['/orders', invoice.orderId]"
-                        >#{{ invoice.orderId }}</a
-                      >
+                      <a [routerLink]="['/orders', invoice.orderId]" class="text-decoration-none">
+                        #{{ invoice.orderId }}
+                      </a>
                     </td>
-                    <td>{{ invoice.dueDate | date : "mediumDate" }}</td>
                     <td>
-                      <span
-                        class="badge"
-                        [ngClass]="getPaymentStatusClass(invoice.paymentStatus)"
-                      >
+                      <span class="text-danger fw-medium">{{ invoice.dueDate | date : "mediumDate" }}</span>
+                    </td>
+                    <td>
+                      <span class="badge" [ngClass]="getPaymentStatusClass(invoice.paymentStatus)">
                         {{ invoice.paymentStatus }}
                       </span>
                     </td>
-                    <td>${{ invoice.total | number : "1.2-2" }}</td>
-                    <td>
-                      <a
-                        [routerLink]="['/invoices', invoice.id]"
-                        class="btn btn-sm btn-outline-primary me-1"
-                      >
+                    <td class="fw-medium">${{ invoice.total | number : "1.2-2" }}</td>
+                    <td class="text-end">
+                      <a [routerLink]="['/invoices', invoice.id]" class="btn btn-sm btn-outline-primary me-1 rounded-pill">
                         <i class="bi bi-eye"></i>
                       </a>
-                      <a
-                        [routerLink]="['/invoices', invoice.id, 'payment']"
-                        class="btn btn-sm btn-outline-success"
-                      >
+                      <a [routerLink]="['/invoices', invoice.id, 'payment']" class="btn btn-sm btn-outline-success rounded-pill">
                         <i class="bi bi-cash"></i>
                       </a>
                     </td>
